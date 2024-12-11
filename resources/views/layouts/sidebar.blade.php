@@ -8,8 +8,8 @@
                 <i class="fa fa-briefcase"></i> Portfolio Management <i class="fa fa-chevron-down"></i>
             </a>
             <ul class="collapse" id="portfolioMenu">
-                <li><a href="#">All Portfolios</a></li>
-                <li><a href="#">Create Portfolio</a></li>
+            <li><a href="{{ route('personal_info.index') }}">Personal Information</a></li>
+            <li><a href="{{ route('education.index') }}">Education</a></li>               
             </ul>
         </li>
         

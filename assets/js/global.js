@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    
+    var alert = document.getElementById('success-alert');
+    if (alert) {
+        setTimeout(function () {
+            alert.style.display = 'none';
+        }, 5000);
+    }
+
     const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.querySelector('.main-content');
@@ -47,4 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }]
         }
     });
+
+    document.getElementById('end_year').setAttribute('max', new Date().getFullYear());
+
 });

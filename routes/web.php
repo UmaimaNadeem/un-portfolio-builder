@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\PersonalInfoController;
+use App\Http\Controllers\Admin\EducationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
@@ -24,18 +26,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
+Route::group([
+    'middleware' => ['auth', 'role:admin'],
+    'prefix' => 'admin',
+], function () {
+    // Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard', function () {
         return view('pages.admin');
     })->name('pages.admin');
-    Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    Route::resources([
+        'personal_info' => PersonalInfoController::class,
+        'education' => EducationController::class,
+    ]);
 });
+
 
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/user/dashboard', function () {
         return view('pages.user');
     })->name('pages.user');
-    Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
 require __DIR__.'/auth.php';
