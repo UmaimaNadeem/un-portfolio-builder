@@ -42,18 +42,17 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'mobile_no' => ['nullable', 'string', 'unique:'.User::class],
             'country' => ['nullable', 'string', 'max:255'],
-            'role' => ['nullable', 'string', 'in:user,admin'], // You can limit the roles to user/admin or other roles as needed
+            'role' => ['nullable', 'string', 'in:user,admin'], 
         ]);
 
-        // Set default values for role and status if not provided
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role ?? 'user', // Default to 'user' if no role is provided
+            'role' => $request->role ?? 'user', 
             'country' => $request->country,
             'mobile_no' => $request->mobile_no,
-            'status' => true, // Default to active status (true)
+            'status' => true, 
         ]);
 
         event(new Registered($user));

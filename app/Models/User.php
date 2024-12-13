@@ -42,8 +42,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'status' => 'boolean',  // Cast the status as a boolean
-        'password' => 'hashed', // Ensure password is hashed
+        'status' => 'boolean',  
+        'password' => 'hashed', 
     ];
 
     /**

@@ -12,12 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Register the custom RoleMiddleware as an alias
         $middleware->alias([
-            'role' => RoleMiddleware::class, // You can use this alias in routes
+            'role' => RoleMiddleware::class, 
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        // Define exception handling if necessary
     })
     ->create();
