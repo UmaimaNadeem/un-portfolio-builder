@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\EducationController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\WorkExperienceController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
@@ -45,6 +46,9 @@ Route::group([
         'work_experiences' => WorkExperienceController::class,
         'projects' => ProjectController::class,
     ]);
+
+    Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
+
 });
 
 
