@@ -12,6 +12,7 @@
             <li><a href="{{ route('education.index') }}">Education</a></li>               
             <li><a href="{{ route('skills.index') }}">Skills</a></li>               
             <li><a href="{{ route('work_experiences.index') }}">Work Experiences</a></li>               
+            <li><a href="{{ route('projects.index') }}">Projects</a></li>               
             </ul>
         </li>
         

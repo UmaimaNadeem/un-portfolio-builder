@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PersonalInfoController;
 use App\Http\Controllers\Admin\EducationController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\WorkExperienceController;
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
@@ -42,6 +43,7 @@ Route::group([
         'education' => EducationController::class,
         'skills' => SkillController::class,
         'work_experiences' => WorkExperienceController::class,
+        'projects' => ProjectController::class,
     ]);
 });
 

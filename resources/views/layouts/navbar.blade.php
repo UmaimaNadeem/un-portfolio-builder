@@ -2,9 +2,7 @@
     <button class="btn btn-toggle" id="sidebarToggleBtn">
         <i class="fa fa-bars"></i>
     </button>
-    <h1 class="ml-4">Dashboard</h1>
 
-    <!-- Profile Dropdown -->
     <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
