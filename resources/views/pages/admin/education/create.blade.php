@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-content">
+<div class="unMainContainer">
     <h1>Add Education</h1>
 
     <!-- Display All Errors in a Single Alert -->

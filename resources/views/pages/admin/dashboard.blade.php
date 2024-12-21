@@ -3,7 +3,7 @@
 @section('content')
 <div class="unMainContainer">
     <div class="d-flex justify-content-between align-items-center mt-4">
-        <h1>Dashboard</h1>
+        <h1>Welcome to {{ $user->role}} Dashboard</h1> 
         <button class="btn btn-primary">Add Data</button>
     </div>
 

@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\UserProfileController;
 use App\Http\Controllers\Admin\PersonalInfoController;
 use App\Http\Controllers\Admin\EducationController;
 use App\Http\Controllers\Admin\SkillController;
@@ -10,53 +13,48 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/', [AuthController::class, 'login'])->name('home');
+    Route::get('login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('login/process', [AuthController::class, 'loginProcess'])->name('auth.login.process');
 });
 
-Route::get('/dashboard', function () {
-    $user = auth()->user();
-    if ($user->hasRole('admin')) {
-        return redirect()->route('pages.admin');
-    } elseif ($user->hasRole('user')) {
-        return redirect()->route('pages.user');
-    }
-    abort(403, 'Unauthorized action.');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/profile', [UserProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::group([
+        'middleware' => ['admin'],
+        'prefix' => 'admin',
+    ], function () {
+        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        
+        Route::resources([
+            'personal_info' => PersonalInfoController::class,
+            'education' => EducationController::class,
+            'skills' => SkillController::class,
+            'work_experiences' => WorkExperienceController::class,
+            'projects' => ProjectController::class, 'personal_info' => PersonalInfoController::class,
+            'education' => EducationController::class,
+            'skills' => SkillController::class,
+            'work_experiences' => WorkExperienceController::class,
+            'projects' => ProjectController::class,
+        ]);
+
+        Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
+
+    });
+
+    Route::group([
+        'middleware' => ['member'],
+        'prefix' => 'member',
+    ], function () {
+        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('member.dashboard');
+       });
+
 });
 
-Route::group([
-    'middleware' => ['auth', 'role:admin'],
-    'prefix' => 'admin',
-], function () {
-    // Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/dashboard', function () {
-        return view('pages.admin');
-    })->name('pages.admin');
 
-    Route::resources([
-        'personal_info' => PersonalInfoController::class,
-        'education' => EducationController::class,
-        'skills' => SkillController::class,
-        'work_experiences' => WorkExperienceController::class,
-        'projects' => ProjectController::class,
-    ]);
-
-    Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
-
-});
-
-
-Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/user/dashboard', function () {
-        return view('pages.user');
-    })->name('pages.user');
-});
-
-require __DIR__.'/auth.php';
 

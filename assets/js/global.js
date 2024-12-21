@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
     const sidebar = document.getElementById('sidebar');
-    const mainContent = document.querySelector('.main-content');
+    const mainContent = document.querySelector('.unMainContainer');
     const overlay = document.getElementById('overlay');
 
     if (sidebarToggleBtn && sidebar && mainContent && overlay) {

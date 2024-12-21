@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-content">
+<div class="unMainContainer">
     <h1>Projects</h1>
 
     @if ($message = Session::get('success'))

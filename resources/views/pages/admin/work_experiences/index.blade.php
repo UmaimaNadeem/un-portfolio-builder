@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-content">
+<div class="unMainContainer">
     <h1>Work Experiences</h1>
     @if (session('success'))
         <div class="alert alert-success" id="success-alert">

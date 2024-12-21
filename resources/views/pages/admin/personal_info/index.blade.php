@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-content">
+<div class="unMainContainer">
     <h1>Personal Info</h1>
     <a href="{{ route('personal_info.create') }}" class="btn btn-primary">Add Personal Info</a>
 

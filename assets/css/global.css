@@ -54,13 +54,13 @@ body {
     margin-right: 15px;
 }
 
-.main-content {
+.unMainContainer {
     margin-left: 250px;
     transition: margin-left 0.3s ease-in-out;
     padding: 20px;
 }
 
-.main-content.hidden-sidebar {
+.unMainContainer.hidden-sidebar {
     margin-left: 0;
 }
 
@@ -110,7 +110,7 @@ body {
         transform: translateX(0);
     }
 
-    .main-content {
+    .unMainContainer {
         margin-left: 0;
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-content">
+<div class="unMainContainer">
     <h1>Add Skill</h1>
 
     <form action="{{ route('skills.store') }}" method="POST">

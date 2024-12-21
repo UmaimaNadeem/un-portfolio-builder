@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-content">
+<div class="unMainContainer">
     <h1>Edit Skill</h1>
 
     <form action="{{ route('skills.update', $skill->id) }}" method="POST">

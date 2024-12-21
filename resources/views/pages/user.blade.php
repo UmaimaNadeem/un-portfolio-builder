@@ -34,12 +34,12 @@
         .sidebar .fa {
             margin-right: 15px;
         }
-        .main-content {
+        .unMainContainer {
             margin-left: 250px;
             transition: margin-left 0.3s ease-in-out;
             padding: 20px;
         }
-        .main-content.hidden-sidebar {
+        .unMainContainer.hidden-sidebar {
             margin-left: 0;
         }
         .navbar {
@@ -86,7 +86,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="unMainContainer">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <button class="btn btn-toggle" id="sidebarToggleBtn">
                 <i class="fa fa-bars"></i>
@@ -182,7 +182,7 @@
         // Sidebar Toggle Functionality
         document.getElementById('sidebarToggleBtn').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
-            const mainContent = document.querySelector('.main-content');
+            const mainContent = document.querySelector('.unMainContainer');
             sidebar.classList.toggle('sidebar-hidden');
             mainContent.classList.toggle('hidden-sidebar');
         });

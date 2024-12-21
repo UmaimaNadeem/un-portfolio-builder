@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-content">
+<div class="unMainContainer">
     <div class="container">
         <div class="profile-header">
             <h1>{{ $user->name }}</h1>
