@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\WorkExperienceController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\ARModelController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::group(['middleware' => 'guest'], function () {
@@ -41,8 +42,12 @@ Route::group(['middleware' => 'auth'], function () {
             'skills' => SkillController::class,
             'work_experiences' => WorkExperienceController::class,
             'projects' => ProjectController::class,
+            'armodels' => ARModelController::class,
         ]);
 
+        Route::get('/armodels/{armodel}/edit', [ARModelController::class, 'edit'])->name('armodels.edit');
+        Route::get('/armodels/{armodel}', [ARModelController::class, 'show'])->name('armodels.show');
+        
         Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
 
     });

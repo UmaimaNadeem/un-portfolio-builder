@@ -17,13 +17,9 @@
         </li>
         
         <li>
-            <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#projectsMenu">
-                <i class="fa fa-cogs"></i> Projects <i class="fa fa-chevron-down"></i>
+            <a href="{{ route('armodels.index') }}">
+                <i class="fa fa-cogs"></i> 3D Models
             </a>
-            <ul class="collapse" id="projectsMenu">
-                <li><a href="#">All Projects</a></li>
-                <li><a href="#">Add New Project</a></li>
-            </ul>
         </li>
         
         <li><a href="#"><i class="fa fa-wrench"></i> Skills</a></li>
