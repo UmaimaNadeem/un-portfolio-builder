@@ -13,6 +13,11 @@ use App\Models\Education;
 
 class PortfolioController extends Controller
 {
+    public function index()
+    {
+        return view('pages.admin.portfolios.index');
+    }
+
     public function show(User $user)
     {
         $personalInfo = PersonalInfo::where('user_id', $user->id)->first();

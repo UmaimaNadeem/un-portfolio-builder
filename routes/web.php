@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/armodels/{armodel}', [ARModelController::class, 'show'])->name('armodels.show');
         
         Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
+        Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
 
     });
 

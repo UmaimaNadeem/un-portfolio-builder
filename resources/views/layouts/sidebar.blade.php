@@ -17,6 +17,12 @@
         </li>
         
         <li>
+            <a href="{{ route('portfolio.index') }}">
+                <i class="fa fa-cogs"></i> My Portfolio
+            </a>
+        </li>
+
+        <li>
             <a href="{{ route('armodels.index') }}">
                 <i class="fa fa-cogs"></i> 3D Models
             </a>

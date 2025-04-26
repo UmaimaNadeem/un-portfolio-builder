@@ -1,95 +1,116 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
-<div class="unMainContainer">
-    <div class="container">
-        <div class="profile-header">
-            <h1>{{ $user->name }}</h1>
-            <p>{{ $personalInfo->email }}</p>
-            <p>{{ $personalInfo->phone }}</p>
-            <p>{{ $personalInfo->address }}</p>
-        </div>
 
-        <div class="profile-section">
-            <h2>Skills</h2>
-            <ul>
-                @foreach ($skills as $skill)
-                    <li>{{ $skill->name }}</li>
-                @endforeach
-            </ul>
-        </div>
+<!-- header -->
+<header class="header">
+  <a href="#" class="logo"><span>UN</span> Portfolio</a>
+  <i class="fas fa-bars" id="menu-icon"></i>
+  <nav class="navbar">
+    <a href="#home" class="active">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#skills">Skills</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-        <div class="profile-section">
-            <h2>Work Experience</h2>
-            @foreach ($workExperiences as $work)
-                <div class="experience">
-                    <h3>{{ $work->job_title }} at {{ $work->company_name }}</h3>
-                    <p>{{ \Carbon\Carbon::parse($work->start_date)->format('M Y') }} - {{ $work->end_date ? \Carbon\Carbon::parse($work->end_date)->format('M Y') : 'Present' }}</p>
-                    <p>{{ $work->description }}</p>
-                </div>
-            @endforeach
-        </div>
+<!-- home section -->
+<section class="home" id="home">
+  <div class="home-content">
+    <h3>Hello, It's me</h3>
+    <h1>{{ $user->name }}</h1>
+    <h3>And I'm a <span class="multiple-text"></span></h3>
+    <p>{{ $personalInfo->summary ?? 'Experienced Web Developer' }}</p>
 
-        <div class="profile-section">
-            <h2>Projects</h2>
-            @foreach ($projects as $project)
-                <div class="project">
-                    <h3>{{ $project->title }}</h3>
-                    <p>{{ $project->description }}</p>
-                    <p><a href="{{ $project->link }}" target="_blank">Project Link</a></p>
-                    @if ($project->media)
-                        @if (Str::endsWith($project->media, ['.jpg', '.jpeg', '.png']))
-                            <img src="{{ url($project->media) }}" alt="Project Media" style="width: 100%;">
-                        @else
-                            <video width="100%" controls>
-                                <source src="{{ url($project->media) }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        @endif
-                    @endif
-                </div>
-            @endforeach
-        </div>
-
-        <div class="profile-section">
-            <h2>Education</h2>
-            @foreach ($educations as $education)
-                <div class="education">
-                    <h3>{{ $education->degree }} from {{ $education->institution }}</h3>
-                    <p>{{ \Carbon\Carbon::parse($education->start_date)->format('M Y') }} - {{ $education->end_date ? \Carbon\Carbon::parse($education->end_date)->format('M Y') : 'Present' }}</p>
-                    <p>{{ $education->description }}</p>
-                </div>
-            @endforeach
-        </div>
+    <div class="social-media">
+      <a href="{{ $personalInfo->linkedin }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="{{ $personalInfo->github }}" target="_blank"><i class="fab fa-github"></i></a>
+      <a href="{{ $personalInfo->instagram }}" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://wa.me/{{ $personalInfo->whatsapp }}" target="_blank"><i class="fab fa-whatsapp"></i></a>
     </div>
+    {{-- <a href="{{ asset('storage/'.$personalInfo->cv) }}" download class="btn">Download CV</a> --}}
+    <a href="{{ asset('assets/files/Umaima_CV.pdf') }}" download="Umaima_CV.pdf" class="btn">Download CV</a>
 </div>
-@endsection
+  <div class="home-img">
+    {{-- <img src="{{ asset('storage/'.$personalInfo->profile_picture) }}" alt="profilePic" /> --}}
+    <img src="{{ asset('assets/images/new logo.png') }}" alt="profilPic" />
+</div>
+</section>
 
-@section('styles')
-<style>
-    .portfolio {
-        padding: 20px;
-        background-color: #f5f5f5;
-    }
-    .profile-header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    .profile-section {
-        background: white;
-        padding: 20px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .profile-section h2 {
-        margin-bottom: 20px;
-    }
-    .experience, .project, .education {
-        margin-bottom: 20px;
-    }
-    .project img, .project video {
-        margin-top: 10px;
-    }
-</style>
+<!-- skills section -->
+<section class="skbox" id="skills">
+  <h2 class="heading">My <span>Skills</span></h2>
+  <div class="skills-container">
+    <div class="skill-box">
+      @foreach ($skills as $skill)
+        <a href="#" class="btn">{{ $skill->name }}</a>
+      @endforeach
+    </div>
+  </div>
+</section>
+
+<!-- Work Experience -->
+<section class="services" id="services">
+  <h2 class="heading">My <span>Work Experience</span></h2>
+  <div class="services-container">
+    @foreach ($workExperiences as $work)
+      <div class="services-box">
+        <i class="fas fa-briefcase"></i>
+        <h3>{{ $work->job_title }} at {{ $work->company_name }}</h3>
+        <p>
+          <strong>{{ \Carbon\Carbon::parse($work->start_date)->format('M Y') }} - 
+            {{ $work->end_date ? \Carbon\Carbon::parse($work->end_date)->format('M Y') : 'Present' }}</strong>
+          <br>
+          {{ $work->description }}
+        </p>
+      </div>
+    @endforeach
+  </div>
+</section>
+
+<!-- Portfolio Projects -->
+<section class="portfolio" id="portfolio">
+  <h2 class="heading">Latest <span>Projects</span></h2>
+  <div class="portfolio-container">
+    @foreach ($projects as $project)
+      <div class="portfolio-box">
+        @if(Str::endsWith($project->media, ['.jpg', '.jpeg', '.png']))
+          <img src="{{ asset($project->media) }}" alt="">
+        @else
+          <video width="100%" controls>
+            <source src="{{ asset($project->media) }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        @endif
+        <div class="portfolio-layer">
+          <h4>{{ $project->title }}</h4>
+          <p>{{ $project->description }}</p>
+          <a href="{{ $project->link }}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+        </div>
+      </div>
+    @endforeach
+  </div>
+</section>
+
+<!-- Education Section -->
+<section class="services" id="education">
+  <h2 class="heading">My <span>Education</span></h2>
+  <div class="services-container">
+    @foreach ($educations as $edu)
+      <div class="services-box">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>{{ $edu->degree }} from {{ $edu->institution }}</h3>
+        <p>
+          {{ \Carbon\Carbon::parse($edu->start_date)->format('M Y') }} - 
+          {{ $edu->end_date ? \Carbon\Carbon::parse($edu->end_date)->format('M Y') : 'Present' }}
+          <br>
+          {{ $edu->description }}
+        </p>
+      </div>
+    @endforeach
+  </div>
+</section>
+
 @endsection
