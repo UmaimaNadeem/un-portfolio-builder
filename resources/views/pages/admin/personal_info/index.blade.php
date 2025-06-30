@@ -2,20 +2,19 @@
 
 @section('content')
 <div class="unMainContainer">
-    <h1>Personal Info</h1>
-    <a href="{{ route('personal_info.create') }}" class="btn btn-primary">Add Personal Info</a>
+    <h2>Personal Info List</h2>
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success mt-2" id="success-alert">
-            {{ $message }}
-        </div>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-    
-    <table class="table mt-2">
-        <thead>
+
+    <a href="{{ route('personal_info.create') }}" class="btn btn-primary mb-3">Add New</a>
+
+    <table class="table table-bordered">
+        <thead class="table-light">
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Image</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Address</th>
@@ -23,24 +22,32 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($personalInfos as $personalInfo)
+            @forelse($personalInfos as $info)
                 <tr>
-                    <td>{{ $personalInfo->first_name }}</td>
-                    <td>{{ $personalInfo->last_name }}</td>
-                    <td>{{ $personalInfo->email }}</td>
-                    <td>{{ $personalInfo->phone }}</td>
-                    <td>{{ $personalInfo->address }}</td>
                     <td>
-                        <a href="{{ route('personal_info.show', $personalInfo->id) }}" class="btn btn-info">View Detail</a>
-                        <a href="{{ route('personal_info.edit', $personalInfo->id) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('personal_info.destroy', $personalInfo->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                        @if($info->profile_image)
+                        <img src="{{ asset('content/' . $info->user_id . '/profile/' . $info->profile_image) }}" width="60">
+                        @else
+                            <span>No Image</span>
+                        @endif
+                    </td>
+                    
+                    <td>{{ $info->name }}</td>
+                    <td>{{ $info->email }}</td>
+                    <td>{{ $info->phone }}</td>
+                    <td>{{ $info->address }}</td>
+                    <td>
+                        <a href="{{ route('personal_info.show', $info->id) }}" class="btn btn-info btn-sm">View</a>
+                        <a href="{{ route('personal_info.edit', $info->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('personal_info.destroy', $info->id) }}" method="POST" style="display:inline;">
+                            @csrf @method('DELETE')
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr><td colspan="6">No records found.</td></tr>
+            @endforelse
         </tbody>
     </table>
 </div>

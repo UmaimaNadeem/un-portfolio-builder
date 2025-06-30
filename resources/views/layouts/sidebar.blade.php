@@ -9,6 +9,7 @@
             </a>
             <ul class="collapse" id="portfolioMenu">
             <li><a href="{{ route('personal_info.index') }}">Personal Information</a></li>
+            <li><a href="{{ route('user-profile-links.index') }}">Basic Information</a></li>
             <li><a href="{{ route('education.index') }}">Education</a></li>               
             <li><a href="{{ route('skills.index') }}">Skills</a></li>               
             <li><a href="{{ route('work_experiences.index') }}">Work Experiences</a></li>               

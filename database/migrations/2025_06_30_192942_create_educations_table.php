@@ -13,8 +13,8 @@ class CreateEducationsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('degree');
             $table->string('institution');
-            $table->year('start_year');
-            $table->year('end_year');
+            $table->date('start_year');
+            $table->date('end_year')->nullable();
             $table->string('location')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();

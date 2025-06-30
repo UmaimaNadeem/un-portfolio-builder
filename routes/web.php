@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\WorkExperienceController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\ARModelController;
+use App\Http\Controllers\Admin\UserProfileLinkController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::group(['middleware' => 'guest'], function () {
@@ -43,6 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
             'work_experiences' => WorkExperienceController::class,
             'projects' => ProjectController::class,
             'armodels' => ARModelController::class,
+            'user-profile-links' => UserProfileLinkController::class,
         ]);
 
         Route::get('/armodels/{armodel}/edit', [ARModelController::class, 'edit'])->name('armodels.edit');

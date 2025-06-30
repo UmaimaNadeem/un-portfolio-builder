@@ -25,8 +25,8 @@ class EducationController extends Controller
         $request->validate([
             'degree' => 'required|string|max:255',
             'institution' => 'required|string|max:255',
-            'start_year' => 'required|integer|digits:4',
-            'end_year' => 'required|integer|digits:4|gte:start_year|max:' . now()->year,
+            'start_year' => 'required|date',
+            'end_year' => 'nullable|date',
             'location' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);
@@ -54,8 +54,8 @@ class EducationController extends Controller
         $request->validate([
             'degree' => 'required|string|max:255',
             'institution' => 'required|string|max:255',
-            'start_year' => 'required|integer|digits:4',
-            'end_year' => 'required|integer|digits:4|gte:start_year|max:' . now()->year,
+            'start_year' => 'required|date',
+            'end_year' => 'required|date|max:' . now()->year,
             'location' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);

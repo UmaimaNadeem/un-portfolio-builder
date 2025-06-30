@@ -99,17 +99,18 @@
   <h2 class="heading">My <span>Education</span></h2>
   <div class="services-container">
     @foreach ($educations as $edu)
-      <div class="services-box">
-        <i class="fas fa-graduation-cap"></i>
-        <h3>{{ $edu->degree }} from {{ $edu->institution }}</h3>
-        <p>
-          {{ \Carbon\Carbon::parse($edu->start_date)->format('M Y') }} - 
-          {{ $edu->end_date ? \Carbon\Carbon::parse($edu->end_date)->format('M Y') : 'Present' }}
-          <br>
-          {{ $edu->description }}
-        </p>
-      </div>
-    @endforeach
+  <div class="services-box">
+    <i class="fas fa-graduation-cap"></i>
+    <h3>{{ $edu->degree }} from {{ $edu->institution }}</h3>
+    <p>
+      {{ \Carbon\Carbon::parse($edu->start_year)->format('M Y') }} - 
+      {{ $edu->end_year ? \Carbon\Carbon::parse($edu->end_year)->format('M Y') : 'Present' }}
+      <br>
+      {{ $edu->description }}
+    </p>
+  </div>
+@endforeach
+
   </div>
 </section>
 

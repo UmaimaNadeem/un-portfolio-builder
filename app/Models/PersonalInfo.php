@@ -10,12 +10,7 @@ class PersonalInfo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'address',
+        'user_id', 'name', 'email', 'phone', 'address', 'profile_image',
     ];
 
     public function user()
