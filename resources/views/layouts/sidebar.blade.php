@@ -11,6 +11,7 @@
             <li><a href="{{ route('personal_info.index') }}">Personal Information</a></li>
             <li><a href="{{ route('user-profile-links.index') }}">Basic Information</a></li>
             <li><a href="{{ route('education.index') }}">Education</a></li>               
+            <li><a href="{{ route('services.index') }}">Services</a></li>               
             <li><a href="{{ route('skills.index') }}">Skills</a></li>               
             <li><a href="{{ route('work_experiences.index') }}">Work Experiences</a></li>               
             <li><a href="{{ route('projects.index') }}">Projects</a></li>               

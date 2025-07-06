@@ -41,11 +41,3 @@ ScrollReveal({
 ScrollReveal().reveal('.home-content, .heading', { origin: 'top' });
 ScrollReveal().reveal('.home-img, .services-container, .portfolio-box, .contact form', { origin: 'bottom' });
 ScrollReveal().reveal('.home-content h1, .about-img', { origin: 'left' });
-
-const typed = new Typed('.multiple-text', {
-  strings: ['Full Stack Developer', 'UI/UX designer', "Laravel Developer", "React Developer", "Wordpress Developer", 'SQA Engineer',  "Automation Tester"],
-  typeSpeed: 100,
-  backSpeed: 100,
-  backDelay: 1000,
-  loop: true
-});

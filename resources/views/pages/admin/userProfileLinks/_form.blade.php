@@ -5,10 +5,11 @@
 </div>
 
 <div class="mb-3">
-    <label>Stack</label>
-    <input type="text" name="stack" value="{{ old('stack', $userProfileLink->stack ?? '') }}" class="form-control" required>
+    <label>Stacks (comma separated)</label>
+    <input type="text" name="stack" value="{{ old('stack', $userProfileLink->stack ?? '') }}" class="form-control" placeholder="e.g. Laravel, React, UI/UX" required>
     @error('stack') <small class="text-danger">{{ $message }}</small> @enderror
 </div>
+
 
 <div class="mb-3">
     <label>Overview</label>

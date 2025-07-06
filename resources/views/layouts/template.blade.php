@@ -15,14 +15,16 @@
     <div class="main-wrapper">
         @yield('content')
     </div>
-
+<script src="https://unpkg.com/scrollreveal"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ asset('assets/js/portfolio-template.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/scrollreveal"></script>
-<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
 
+@stack('scripts')
+@stack('custom-scripts')
+@stack('styles')
 </body>
 </html>

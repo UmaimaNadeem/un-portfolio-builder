@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserProfileController;
 use App\Http\Controllers\Admin\PersonalInfoController;
 use App\Http\Controllers\Admin\EducationController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\WorkExperienceController;
 use App\Http\Controllers\Admin\ProjectController;
@@ -40,6 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
             'work_experiences' => WorkExperienceController::class,
             'projects' => ProjectController::class, 'personal_info' => PersonalInfoController::class,
             'education' => EducationController::class,
+            'services' => ServiceController::class,
             'skills' => SkillController::class,
             'work_experiences' => WorkExperienceController::class,
             'projects' => ProjectController::class,
