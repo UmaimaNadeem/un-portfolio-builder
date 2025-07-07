@@ -39,21 +39,20 @@ Route::group(['middleware' => 'auth'], function () {
             'education' => EducationController::class,
             'skills' => SkillController::class,
             'work_experiences' => WorkExperienceController::class,
-            'projects' => ProjectController::class, 'personal_info' => PersonalInfoController::class,
-            'education' => EducationController::class,
+            'projects' => ProjectController::class, 
             'services' => ServiceController::class,
-            'skills' => SkillController::class,
-            'work_experiences' => WorkExperienceController::class,
-            'projects' => ProjectController::class,
             'armodels' => ARModelController::class,
             'user-profile-links' => UserProfileLinkController::class,
         ]);
 
         Route::get('/armodels/{armodel}/edit', [ARModelController::class, 'edit'])->name('armodels.edit');
         Route::get('/armodels/{armodel}', [ARModelController::class, 'show'])->name('armodels.show');
-        
+
+        Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
+
         Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
         Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
+        Route::post('/portfolio/store', [PortfolioController::class, 'storeFullPortfolio'])->name('portfolio.store');
 
     });
 
