@@ -236,7 +236,7 @@
                 <div class="card-glass text-center p-4 m-3">
                     <h5 class="mb-3">Preview Your Portfolio</h5>
                     <p class="text-muted">See how your portfolio looks to visitors.</p>
-                    <a href="{{ url('portfolio/' . $userId) }}" target="_blank" class="btn btn-primary">
+                    <a href="{{ url('member/portfolio/' . $userId) }}" target="_blank" class="btn btn-primary">
                         <i class="bi bi-eye me-1"></i> View Portfolio
                     </a>
                 </div>

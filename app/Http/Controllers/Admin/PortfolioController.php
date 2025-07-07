@@ -27,19 +27,25 @@ class PortfolioController extends Controller
     {
         return view('pages.admin.portfolios.create');
     }
-
-    public function show(User $user)
-    {
-        $personalInfo = PersonalInfo::where('user_id', $user->id)->first();
-        $userProfileLink = UserProfileLink::where('user_id', $user->id)->first();
-        $workExperiences = WorkExperience::where('user_id', $user->id)->get();
-        $educations = Education::where('user_id', $user->id)->get();
-        $services = Service::where('user_id', $user->id)->get();
-        $skills = Skill::where('user_id', $user->id)->get();
-        $projects = Project::where('user_id', $user->id)->get();
-
-        return view('pages.admin.portfolios.show', compact('user', 'personalInfo','userProfileLink', 'services', 'skills', 'workExperiences', 'projects', 'educations'));
+public function show(User $user)
+{
+    if (auth()->id() !== $user->id && !auth()->user()->is_admin) {
+        return response()->view('errors.custom-403', [], 403);
     }
+
+    $personalInfo = PersonalInfo::where('user_id', $user->id)->first();
+    $userProfileLink = UserProfileLink::where('user_id', $user->id)->first();
+    $workExperiences = WorkExperience::where('user_id', $user->id)->get();
+    $educations = Education::where('user_id', $user->id)->get();
+    $services = Service::where('user_id', $user->id)->get();
+    $skills = Skill::where('user_id', $user->id)->get();
+    $projects = Project::where('user_id', $user->id)->get();
+
+    return view('pages.admin.portfolios.show', compact(
+        'user', 'personalInfo', 'userProfileLink', 'services', 'skills', 'workExperiences', 'projects', 'educations'
+    ));
+}
+
 
     public function storeFullPortfolio(Request $request)
 {
