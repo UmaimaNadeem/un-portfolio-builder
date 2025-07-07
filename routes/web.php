@@ -27,41 +27,45 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+    Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
+ Route::resources([
+        'personal_info' => PersonalInfoController::class,
+        'education' => EducationController::class,
+        'skills' => SkillController::class,
+        'work_experiences' => WorkExperienceController::class,
+        'projects' => ProjectController::class,
+        'services' => ServiceController::class,
+        'armodels' => ARModelController::class,
+        'user-profile-links' => UserProfileLinkController::class,
+    ]);
+     Route::group([
+    'middleware' => ['auth', 'member'],
+    'prefix' => 'member',
+    'as' => 'member.',
+], function () {
+    Route::get('dashboard', [AdminDashboardController::class, 'memberDashboard'])->name('dashboard');
+    Route::get('personal_info', [PersonalInfoController::class, 'index'])->name('member.personal_info.index');
+
+   
+});
 
     Route::group([
         'middleware' => ['admin'],
         'prefix' => 'admin',
     ], function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-        
-        Route::resources([
-            'personal_info' => PersonalInfoController::class,
-            'education' => EducationController::class,
-            'skills' => SkillController::class,
-            'work_experiences' => WorkExperienceController::class,
-            'projects' => ProjectController::class, 
-            'services' => ServiceController::class,
-            'armodels' => ARModelController::class,
-            'user-profile-links' => UserProfileLinkController::class,
-        ]);
 
         Route::get('/armodels/{armodel}/edit', [ARModelController::class, 'edit'])->name('armodels.edit');
         Route::get('/armodels/{armodel}', [ARModelController::class, 'show'])->name('armodels.show');
 
         Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
 
-        Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
         Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
         Route::post('/portfolio/store', [PortfolioController::class, 'storeFullPortfolio'])->name('portfolio.store');
 
     });
 
-    Route::group([
-        'middleware' => ['member'],
-        'prefix' => 'member',
-    ], function () {
-        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('member.dashboard');
-       });
+
 
 });
 

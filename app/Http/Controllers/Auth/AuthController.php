@@ -69,8 +69,8 @@ class AuthController extends BaseController
         if ($currentUser) {
             if ($currentUser->role == 'admin') {
                 return redirect()->route('admin.dashboard');
-            } elseif ($currentUser->role == 'team') {
-                return redirect()->route('team.dashboard');
+            } elseif ($currentUser->role == 'member') {
+                return redirect()->route('member.dashboard');
             } else {
                 return redirect()->route('auth.login');
             }
