@@ -114,7 +114,7 @@
             transition: margin-left 0.3s ease;
         }
 
-        .sidebar.collapsed ~ .main {
+        .sidebar.collapsed~.main {
             margin-left: var(--sidebar-collapsed-width);
         }
 
@@ -191,7 +191,7 @@
         </div>
         <div class="profile">
             <a href="{{ route('profile.show') }}" class="text-dark"><i class="bi bi-person-circle"></i></a>
-            <form action="{{ route('logout') }}" method="POST">
+            <form action="{{ route('logout') }}" method="Post">
                 @csrf
                 <button class="btn btn-sm btn-outline-dark">Logout</button>
             </form>
@@ -204,42 +204,61 @@
         <nav class="sidebar" id="sidebar">
             <div class="logo"><span>UN Portfolio</span></div>
             <ul class="nav flex-column">
-                <li><a href="{{ route('member.dashboard') }}" class="{{ request()->is('member/dashboard') ? 'active' : '' }}">
-                    <i class="bi bi-speedometer2"></i> <span>Dashboard</span></a></li>
+                <li><a href="{{ route('member.dashboard') }}"
+                        class="{{ request()->is('member/dashboard') ? 'active' : '' }}">
+                        <i class="bi bi-speedometer2"></i> <span>Dashboard</span></a></li>
 
-                <li><a href="{{ route('personal_info.index') }}" class="{{ request()->is('member/personal_info*') ? 'active' : '' }}">
-                    <i class="bi bi-person"></i> <span>Personal Info</span></a></li>
+                <li><a href="{{ route('personal_info.index') }}"
+                        class="{{ request()->is('member/personal_info*') ? 'active' : '' }}">
+                        <i class="bi bi-person"></i> <span>Personal Info</span></a></li>
 
-                <li><a href="{{ route('user-profile-links.index') }}" class="{{ request()->is('member/user-profile-links*') ? 'active' : '' }}">
-                    <i class="bi bi-link-45deg"></i> <span>Profile Links</span></a></li>
+                <li><a href="{{ route('user-profile-links.index') }}"
+                        class="{{ request()->is('member/user-profile-links*') ? 'active' : '' }}">
+                        <i class="bi bi-link-45deg"></i> <span>Profile Links</span></a></li>
 
-                <li><a href="{{ route('education.index') }}" class="{{ request()->is('member/education*') ? 'active' : '' }}">
-                    <i class="bi bi-mortarboard"></i> <span>Education</span></a></li>
+                <li><a href="{{ route('education.index') }}"
+                        class="{{ request()->is('member/education*') ? 'active' : '' }}">
+                        <i class="bi bi-mortarboard"></i> <span>Education</span></a></li>
 
-                <li><a href="{{ route('services.index') }}" class="{{ request()->is('member/services*') ? 'active' : '' }}">
-                    <i class="bi bi-grid"></i> <span>Services</span></a></li>
+                <li><a href="{{ route('services.index') }}"
+                        class="{{ request()->is('member/services*') ? 'active' : '' }}">
+                        <i class="bi bi-grid"></i> <span>Services</span></a></li>
 
-                <li><a href="{{ route('skills.index') }}" class="{{ request()->is('member/skills*') ? 'active' : '' }}">
-                    <i class="bi bi-lightning-charge"></i> <span>Skills</span></a></li>
+                <li><a href="{{ route('skills.index') }}"
+                        class="{{ request()->is('member/skills*') ? 'active' : '' }}">
+                        <i class="bi bi-lightning-charge"></i> <span>Skills</span></a></li>
 
-                <li><a href="{{ route('work_experiences.index') }}" class="{{ request()->is('member/work_experiences*') ? 'active' : '' }}">
-                    <i class="bi bi-briefcase"></i> <span>Work Experience</span></a></li>
+                <li><a href="{{ route('work_experiences.index') }}"
+                        class="{{ request()->is('member/work_experiences*') ? 'active' : '' }}">
+                        <i class="bi bi-briefcase"></i> <span>Work Experience</span></a></li>
 
-                <li><a href="{{ route('projects.index') }}" class="{{ request()->is('member/projects*') ? 'active' : '' }}">
-                    <i class="bi bi-kanban"></i> <span>Projects</span></a></li>
+                <li><a href="{{ route('projects.index') }}"
+                        class="{{ request()->is('member/projects*') ? 'active' : '' }}">
+                        <i class="bi bi-kanban"></i> <span>Projects</span></a></li>
             </ul>
 
-             @php
-                    $userId = auth()->id(); // Get current logged-in user ID
-                @endphp
+            @php
+                $userId = auth()->id();
+            @endphp
 
-                <div class="card-glass text-center p-4 m-3">
-                    <h5 class="mb-3">Preview Your Portfolio</h5>
-                    <p class="text-muted">See how your portfolio looks to visitors.</p>
-                    <a href="{{ url('member/portfolio/' . $userId) }}" target="_blank" class="btn btn-primary">
-                        <i class="bi bi-eye me-1"></i> View Portfolio
-                    </a>
-                </div>
+            <div class="card-glass text-center p-4 m-3">
+                <h5 class="mb-3">Preview Your Portfolio</h5>
+                <p class="text-muted">See how your portfolio looks to visitors.</p>
+@php
+    use Illuminate\Support\Str;
+    use App\Models\PersonalInfo;
+
+    $personalInfo = PersonalInfo::where('user_id', $user->id)->first();
+    $portfolioName = $personalInfo ? Str::slug($personalInfo->name) : $user->id;
+@endphp
+
+<a href="{{ route('member.portfolio.showByName', $portfolioName) }}" target="_blank" class="btn btn-primary">
+    <i class="bi bi-eye me-1"></i> View Portfolio
+</a>
+
+
+
+            </div>
         </nav>
 
         <!-- Main Content -->

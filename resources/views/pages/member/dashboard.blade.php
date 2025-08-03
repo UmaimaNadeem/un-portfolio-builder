@@ -37,24 +37,6 @@
     </div>
 </div>
 
-        <div class="row mt-4">
-            <div class="col-md-4">
-    
-                @php
-                    $userId = auth()->id(); // Get current logged-in user ID
-                @endphp
-
-                <div class="card-glass text-center p-4 mb-4">
-                    <h5 class="mb-3">Preview Your Portfolio</h5>
-                    <p class="text-muted">See how your portfolio looks to visitors.</p>
-                    <a href="{{ url('member/portfolio/' . $userId) }}" target="_blank" class="btn btn-primary">
-                        <i class="bi bi-eye me-1"></i> View Your Portfolio
-                    </a>
-                </div>
-
-            </div>
-            <!-- Add similar cards for Projects, Skills, etc. -->
-        </div>
     @endsection
 @push('styles')
 <style>

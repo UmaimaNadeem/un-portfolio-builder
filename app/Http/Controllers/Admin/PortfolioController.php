@@ -195,4 +195,40 @@ public function show(User $user)
     return redirect()->route('dashboard')->with('success', 'Full portfolio created successfully!');
 }
 
+
+
+public function showByName($name)
+{
+    $slug = Str::slug($name); 
+
+    $personalInfo = PersonalInfo::all()->first(function ($info) use ($slug) {
+        return Str::slug($info->name) === $slug;
+    });
+
+    if (!$personalInfo) {
+        abort(404, 'Portfolio not found');
+    }
+
+    $user = $personalInfo->user;
+
+    if (auth()->id() !== $user->id && !auth()->user()->is_admin) {
+        return response()->view('errors.custom-403', [], 403);
+    }
+
+    $userProfileLink = UserProfileLink::where('user_id', $user->id)->first();
+    $workExperiences = WorkExperience::where('user_id', $user->id)->get();
+    $educations = Education::where('user_id', $user->id)->get();
+    $services = Service::where('user_id', $user->id)->get();
+    $skills = Skill::where('user_id', $user->id)->get();
+    $projects = Project::where('user_id', $user->id)->get();
+
+    return view('pages.admin.portfolios.show', compact(
+        'user', 'personalInfo', 'userProfileLink', 'services', 
+        'skills', 'workExperiences', 'projects', 'educations'
+    ));
+}
+
+
+
+
 }

@@ -26,7 +26,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('auth.register.process') }}">
                         @csrf
 
                         <div class="form-group">

@@ -20,6 +20,8 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/', [AuthController::class, 'login'])->name('home');
     Route::get('login', [AuthController::class, 'login'])->name('auth.login');
     Route::post('login/process', [AuthController::class, 'loginProcess'])->name('auth.login.process');
+    Route::get('register', [AuthController::class, 'register'])->name('auth.register');
+    Route::post('register/process', [AuthController::class, 'registerPost'])->name('auth.register.process');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -44,7 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
 ], function () {
     Route::get('dashboard', [AdminDashboardController::class, 'memberDashboard'])->name('dashboard');
     Route::get('personal_info', [PersonalInfoController::class, 'index'])->name('member.personal_info.index');
-    Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('member.portfolio.show');
+   Route::get('/portfolio/id/{user}', [PortfolioController::class, 'show'])->name('member.portfolio.show');
 
    
 });
@@ -62,7 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
         Route::post('/portfolio/store', [PortfolioController::class, 'storeFullPortfolio'])->name('portfolio.store');
-    Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
+        Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
 
     });
 
@@ -70,5 +72,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
+Route::get('/portfolio/{name}', [PortfolioController::class, 'showByName'])->name('member.portfolio.showByName');
 
 
