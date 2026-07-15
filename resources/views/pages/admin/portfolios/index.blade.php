@@ -11,6 +11,6 @@
         </div>
     @endif
 
-    <a href="http://localhost/un-portfolio-builder/admin/portfolio/1'" class="btn btn-primary mb-3">View Your Portfolio</a>       
+    <a href="http://un-portfolio-builder.test/admin/portfolio/1'" class="btn btn-primary mb-3">View Your Portfolio</a>       
 </div>
 @endsection
