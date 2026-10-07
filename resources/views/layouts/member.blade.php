@@ -44,8 +44,9 @@
             padding: 1.25rem 0.9rem;
             color: #f7f4ef;
             background:
-                linear-gradient(165deg, rgba(18, 24, 30, 0.96), rgba(28, 42, 48, 0.94)),
-                radial-gradient(circle at 20% 10%, rgba(232, 93, 4, 0.25), transparent 45%);
+            radial-gradient(900px 480px at 12% -10%, rgba(62, 207, 207, 0.22), transparent 55%),
+                radial-gradient(700px 420px at 95% 5%, rgba(255, 122, 61, 0.16), transparent 50%),
+                linear-gradient(165deg, #061418 0%, #0a1f28 45%, #07131a 100%);
             border-right: 1px solid rgba(255,255,255,0.06);
             transition: width 0.28s ease;
             overflow: hidden;

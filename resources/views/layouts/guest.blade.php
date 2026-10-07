@@ -11,14 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ink: #0f1419;
-            --muted: #5a6570;
-            --paper: #f3f1ec;
-            --panel: rgba(255, 252, 247, 0.88);
-            --line: rgba(15, 20, 25, 0.08);
+            --ink: #e8f0f2;
+            --muted: #8aa0a8;
             --accent: #e85d04;
-            --accent-2: #1d6a63;
-            --shadow: 0 18px 50px rgba(15, 20, 25, 0.08);
+            --accent-2: #ff7a3d;
+            --panel: rgba(12, 28, 36, 0.72);
+            --line: rgba(126, 232, 250, 0.16);
         }
         * { box-sizing: border-box; }
         body {
@@ -27,9 +25,9 @@
             color: var(--ink);
             font-family: 'Manrope', sans-serif;
             background:
-                radial-gradient(1100px 500px at 10% -10%, rgba(232, 93, 4, 0.14), transparent 55%),
-                radial-gradient(900px 480px at 95% 0%, rgba(29, 106, 99, 0.16), transparent 50%),
-                linear-gradient(180deg, #efece6 0%, var(--paper) 40%, #e8ebe8 100%);
+                radial-gradient(900px 480px at 12% -10%, rgba(62, 207, 207, 0.22), transparent 55%),
+                radial-gradient(700px 420px at 95% 5%, rgba(255, 122, 61, 0.16), transparent 50%),
+                linear-gradient(165deg, #061418 0%, #0a1f28 45%, #07131a 100%);
             overflow-x: hidden;
         }
         .auth-shell {
@@ -43,30 +41,30 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            border-right: 1px solid var(--line);
             overflow: hidden;
         }
         .auth-visual::before {
             content: '';
             position: absolute;
-            inset: 14% 14% auto auto;
-            width: 260px; height: 260px;
-            border-radius: 28px;
-            background: linear-gradient(145deg, #1a2b2f 0%, #234e4a 55%, #e85d04 140%);
-            transform: rotate(16deg) perspective(900px) rotateY(-12deg);
-            box-shadow: 0 30px 60px rgba(29, 106, 99, 0.28);
+            inset: 12% 18% auto auto;
+            width: 280px; height: 280px;
+            border-radius: 32px;
+            background: linear-gradient(145deg, rgba(62,207,207,0.35), rgba(255,122,61,0.2));
+            transform: rotate(18deg) perspective(800px) rotateY(-18deg);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.35);
             animation: floatBlock 7s ease-in-out infinite;
         }
         .auth-visual::after {
             content: '';
             position: absolute;
-            left: 12%; bottom: 16%;
-            width: 150px; height: 150px;
-            border-radius: 22px;
+            left: 12%; bottom: 18%;
+            width: 160px; height: 160px;
+            border-radius: 24px;
             border: 1px solid var(--line);
-            background: rgba(255, 252, 247, 0.55);
+            background: rgba(12, 28, 36, 0.5);
             backdrop-filter: blur(8px);
             transform: rotate(-10deg);
-            box-shadow: var(--shadow);
             animation: floatBlock 9s ease-in-out infinite reverse;
         }
         .brand {
@@ -81,8 +79,8 @@
             width: 40px; height: 40px; border-radius: 12px;
             display: grid; place-items: center;
             background: linear-gradient(135deg, var(--accent), #ff9f1c);
-            color: #fff;
-            box-shadow: 0 12px 28px rgba(232, 93, 4, 0.32);
+            color: #fff; flex-shrink: 0;
+            box-shadow: 0 10px 24px rgba(232, 93, 4, 0.35);
         }
         .visual-copy { position: relative; z-index: 1; max-width: 26rem; }
         .visual-copy h1 {
@@ -91,7 +89,6 @@
             line-height: 1.05;
             letter-spacing: -0.04em;
             margin: 0 0 1rem;
-            font-weight: 800;
         }
         .visual-copy p { color: var(--muted); margin: 0; line-height: 1.6; }
         .auth-panel {
@@ -103,38 +100,37 @@
             max-width: 440px;
             background: var(--panel);
             border: 1px solid var(--line);
-            border-radius: 22px;
+            border-radius: 24px;
             padding: 2rem;
-            backdrop-filter: blur(12px);
-            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.35);
         }
         .auth-card h2 {
             font-family: 'Syne', sans-serif;
             font-size: 1.75rem;
             letter-spacing: -0.03em;
             margin: 0 0 0.35rem;
-            font-weight: 800;
         }
         .auth-card .sub { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
         .form-label { color: var(--muted); font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem; }
         .form-control {
-            background: rgba(255,255,255,0.7);
-            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(126,232,250,0.18);
             color: var(--ink);
             border-radius: 12px;
             padding: 0.75rem 0.9rem;
         }
         .form-control:focus {
-            background: #fff;
-            border-color: rgba(232, 93, 4, 0.45);
-            box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.15);
+            background: rgba(255,255,255,0.06);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(62,207,207,0.18);
             color: var(--ink);
         }
-        .form-control::placeholder { color: rgba(90, 101, 112, 0.65); }
+        .form-control::placeholder { color: rgba(138,160,168,0.7); }
         .input-group .form-control { border-right: 0; }
         .input-group-text {
-            background: rgba(255,255,255,0.7);
-            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(126,232,250,0.18);
             border-left: 0;
             color: var(--muted);
             cursor: pointer;
@@ -143,27 +139,19 @@
         .btn-auth {
             width: 100%;
             border: 0;
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 0.85rem 1rem;
             font-weight: 700;
-            color: #fff;
+            color: #042028;
             background: linear-gradient(135deg, var(--accent), #ff9f1c);
-            box-shadow: 0 12px 28px rgba(232, 93, 4, 0.28);
+            box-shadow: 0 14px 34px rgba(62,207,207,0.28);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .btn-auth:hover {
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 16px 34px rgba(232, 93, 4, 0.34);
-        }
+        .btn-auth:hover { color: #042028; transform: translateY(-2px); box-shadow: 0 18px 40px rgba(62,207,207,0.35); }
         .auth-foot { margin-top: 1.25rem; text-align: center; color: var(--muted); font-size: 0.92rem; }
-        .auth-foot a { color: var(--accent-2); font-weight: 700; text-decoration: none; }
-        .auth-foot a:hover { color: var(--accent); }
-        .alert { border-radius: 14px; border: 0; }
-        .form-check-input:checked {
-            background-color: var(--accent);
-            border-color: var(--accent);
-        }
+        .auth-foot a { color: var(--accent); font-weight: 600; text-decoration: none; }
+        .auth-foot a:hover { color: #7ee8fa; }
+        .alert { border-radius: 12px; border: 0; }
         @keyframes floatBlock {
             0%, 100% { translate: 0 0; }
             50% { translate: 0 -14px; }
