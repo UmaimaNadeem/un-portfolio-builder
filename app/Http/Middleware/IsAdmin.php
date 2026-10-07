@@ -10,10 +10,16 @@ class IsAdmin
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role == 'admin') {
+        if (Auth::check() && Auth::user()->isAdmin()) {
             return $next($request);
         }
-        return redirect('auth.login')->with('error', 'You do not have admin access');
+
+        if (Auth::check()) {
+            return redirect()->route('member.dashboard')
+                ->with('error', 'You do not have admin access.');
+        }
+
+        return redirect()->route('auth.login')
+            ->with('error', 'Please sign in to continue.');
     }
 }
-

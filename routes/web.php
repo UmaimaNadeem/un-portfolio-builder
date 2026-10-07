@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserProfileController;
@@ -14,10 +13,26 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\ARModelController;
 use App\Http\Controllers\Admin\UserProfileLinkController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\ThemeController;
+
+// Public
+Route::get('/explore', [PortfolioController::class, 'publicIndex'])->name('portfolios.public');
+Route::get('/p/{slug}', [PortfolioController::class, 'showBySlug'])->name('portfolios.public.show');
+Route::get('/portfolio/{slug}', [PortfolioController::class, 'showBySlug'])->name('member.portfolio.showByName');
+
+// Smart home — never put login behind guest with name "home" (causes redirect loops)
+Route::get('/', function () {
+    if (auth()->check()) {
+        return auth()->user()->isAdmin()
+            ? redirect()->route('admin.dashboard')
+            : redirect()->route('member.dashboard');
+    }
+
+    return redirect()->route('auth.login');
+})->name('home');
 
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/', [AuthController::class, 'login'])->name('home');
     Route::get('login', [AuthController::class, 'login'])->name('auth.login');
     Route::post('login/process', [AuthController::class, 'loginProcess'])->name('auth.login.process');
     Route::get('register', [AuthController::class, 'register'])->name('auth.register');
@@ -25,11 +40,25 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::match(['get', 'post'], 'logout', [AuthController::class, 'logout'])->name('logout');
+
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
- Route::resources([
+
+    // Multi-portfolio management (members + admins)
+    Route::get('/portfolios', [PortfolioController::class, 'index'])->name('portfolios.index');
+    Route::get('/portfolios/create', [PortfolioController::class, 'create'])->name('portfolios.create');
+    Route::post('/portfolios', [PortfolioController::class, 'store'])->name('portfolios.store');
+    Route::get('/portfolios/{portfolio}/manage', [PortfolioController::class, 'manage'])->name('portfolios.manage');
+    Route::get('/portfolios/{portfolio}/edit', [PortfolioController::class, 'edit'])->name('portfolios.edit');
+    Route::put('/portfolios/{portfolio}', [PortfolioController::class, 'update'])->name('portfolios.update');
+    Route::delete('/portfolios/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolios.destroy');
+    Route::post('/portfolios/{portfolio}/select', [PortfolioController::class, 'select'])->name('portfolios.select');
+    Route::get('/portfolios/{portfolio}/preview', [PortfolioController::class, 'show'])->name('portfolios.preview');
+
+    // Content CRUD for active portfolio
+    Route::resources([
         'personal_info' => PersonalInfoController::class,
         'education' => EducationController::class,
         'skills' => SkillController::class,
@@ -39,39 +68,25 @@ Route::group(['middleware' => 'auth'], function () {
         'armodels' => ARModelController::class,
         'user-profile-links' => UserProfileLinkController::class,
     ]);
-     Route::group([
-    'middleware' => ['auth', 'member'],
-    'prefix' => 'member',
-    'as' => 'member.',
-], function () {
-    Route::get('dashboard', [AdminDashboardController::class, 'memberDashboard'])->name('dashboard');
-    Route::get('personal_info', [PersonalInfoController::class, 'index'])->name('member.personal_info.index');
-   Route::get('/portfolio/id/{user}', [PortfolioController::class, 'show'])->name('member.portfolio.show');
 
-   
-});
+    Route::group([
+        'middleware' => ['member'],
+        'prefix' => 'member',
+        'as' => 'member.',
+    ], function () {
+        Route::get('dashboard', [AdminDashboardController::class, 'memberDashboard'])->name('dashboard');
+    });
 
     Route::group([
         'middleware' => ['admin'],
         'prefix' => 'admin',
+        'as' => 'admin.',
     ], function () {
-        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-
-        Route::get('/armodels/{armodel}/edit', [ARModelController::class, 'edit'])->name('armodels.edit');
-        Route::get('/armodels/{armodel}', [ARModelController::class, 'show'])->name('armodels.show');
-
-        Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
-
-        Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
-        Route::post('/portfolio/store', [PortfolioController::class, 'storeFullPortfolio'])->name('portfolio.store');
-        Route::get('/portfolio/{user}', [PortfolioController::class, 'show'])->name('portfolio.show');
-
+        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('themes', [ThemeController::class, 'index'])->name('themes.index');
+        Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
+        Route::get('users/{user}/edit', [UserManagementController::class, 'edit'])->name('users.edit');
+        Route::put('users/{user}', [UserManagementController::class, 'update'])->name('users.update');
+        Route::delete('users/{user}', [UserManagementController::class, 'destroy'])->name('users.destroy');
     });
-
-
-
 });
-
-Route::get('/portfolio/{name}', [PortfolioController::class, 'showByName'])->name('member.portfolio.showByName');
-
-

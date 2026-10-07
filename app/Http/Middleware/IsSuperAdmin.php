@@ -8,21 +8,23 @@ use Illuminate\Support\Facades\Auth;
 
 class IsSuperAdmin
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
-     */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()) {
-            if (Auth::user()->role == 'superAdmin') {
-                return $next($request);
-            }
+        if (Auth::check() && Auth::user()->isSuperAdmin()) {
+            return $next($request);
         }
 
-        return redirect('auth.login')->with('error','You have not valid access');
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'Super admin access required.');
+        }
+
+        if (Auth::check()) {
+            return redirect()->route('member.dashboard')
+                ->with('error', 'You do not have access.');
+        }
+
+        return redirect()->route('auth.login')
+            ->with('error', 'Please sign in to continue.');
     }
 }

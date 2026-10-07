@@ -10,15 +10,15 @@ class IsMember
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check()) {
-            $role = Auth::user()->role;
-            if ($role == 'member') {
-                return $next($request); 
-            }
+        if (Auth::check() && Auth::user()->isMember()) {
+            return $next($request);
         }
 
-        return redirect()->route('auth.login')->with('error', 'You have not valid access');
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('auth.login')
+            ->with('error', 'Please sign in to continue.');
     }
-
 }
-

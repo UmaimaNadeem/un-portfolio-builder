@@ -3,20 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\BaseController as BaseController;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Traits\AuthTrait;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
-use GuzzleHttp\Client;
 use Validator;
 
 class AuthController extends BaseController
 {
-    use AuthTrait;
-
     public function register()
     {
         return view('pages.auth.register');
@@ -33,91 +27,80 @@ class AuthController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return back()
-                ->withErrors($validator)
-                ->withInput();
+            return back()->withErrors($validator)->withInput();
         }
 
-        if ($validator->passes()) {
-            if($request->mobile_number) {
-                $mobileExits = User::where('mobile_number', $request->mobile_number)->first();
-                if ($mobileExits) {
-                    return back()->withErrors('Mobile is already used')->withInput();
-                }
-            }
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->mobile_number = $request->mobile_number;
-            $user->city = $request->city;
-            $user->password = Hash::make($request->password);
-            $user->save();
-
-            $response = $this->sendVerificationEmail($user);
-            if(isset($response['response']) && $response['response'] == 'success'){
-                return redirect()->route('auth.email.verification.message');
-            }
-            else{
-                return redirect("register")->with('error', 'Email is not sent. Contact with support!');
-            }
+        if (User::where('mobile_number', $request->mobile_number)->exists()) {
+            return back()->withErrors('Mobile is already used')->withInput();
         }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'mobile_number' => $request->mobile_number,
+            'city' => $request->city,
+            'password' => Hash::make($request->password),
+            'role' => 'member',
+            'status' => 1,
+        ]);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->route('member.dashboard')->with('success', 'Welcome! Create your first portfolio to get started.');
     }
 
     public function login()
     {
-        $currentUser = Auth::user();
-        if ($currentUser) {
-            if ($currentUser->role == 'admin') {
-                return redirect()->route('admin.dashboard');
-            } elseif ($currentUser->role == 'member') {
-                return redirect()->route('member.dashboard');
-            } else {
-                return redirect()->route('auth.login');
-            }
-        }
-
         return view('pages.auth.login');
     }
 
-
-    public function loginProcess(Request $request){
+    public function loginProcess(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ], [
             'required' => 'The :attribute is required',
         ]);
-        if($validator->fails()){
-            return back()->withErrors($validator->errors());
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput($request->only('email'));
         }
 
-        if ($validator->passes()) {
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            $currentUser = Auth::user();
 
-            $credentials = $request->only('email', 'password');
-            if (Auth::attempt($credentials)) {
-                $currentUser = Auth::user();
+            if ($currentUser->status === 0 || $currentUser->status === false) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
 
-                if ($currentUser->status === 0) {
-                    Auth::logout();
-                    return redirect()->route('auth.login')->withErrors('Your account is deactivated. Please contact support.');
-                }
-
-                if($currentUser->role == 'admin' || $currentUser->role == 'superAdmin'){
-                    return redirect()->route("admin.dashboard");
-                }
-
-                if($currentUser->role == 'member'){
-                    return redirect()->route("member.dashboard");
-                }
-
+                return redirect()->route('auth.login')->withErrors('Your account is deactivated. Please contact support.');
             }
 
-            return redirect()->route('auth.login')->withErrors('Credentials are wrong.');
+            if ($currentUser->isAdmin()) {
+                return redirect()->intended(route('admin.dashboard'));
+            }
+
+            if ($currentUser->isMember()) {
+                return redirect()->intended(route('member.dashboard'));
+            }
+
+            Auth::logout();
         }
+
+        return back()->withErrors('Credentials are wrong.')->withInput($request->only('email'));
     }
 
-    public function logout(){
+    public function logout(Request $request)
+    {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('auth.login');
     }
 }

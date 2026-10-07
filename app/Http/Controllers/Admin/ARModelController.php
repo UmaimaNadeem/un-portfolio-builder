@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\ResolvesActivePortfolio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ArModel;
@@ -10,9 +11,15 @@ use Illuminate\Support\Facades\File;
 
 class ARModelController extends Controller
 {
+    use ResolvesActivePortfolio;
+
     public function index()
     {
-        $arModels = ArModel::all();
+        $portfolio = $this->activePortfolio();
+        $arModels = $portfolio
+            ? ArModel::where('portfolio_id', $portfolio->id)->get()
+            : ArModel::where('user_id', Auth::id())->get();
+
         return view('pages.admin.armodels.index', compact('arModels'));
     }
 
@@ -31,8 +38,10 @@ class ARModelController extends Controller
 
         $data = $request->all();
         $userId = Auth::id();
+        $portfolio = $this->activePortfolio();
 
         $data['user_id'] = $userId;
+        $data['portfolio_id'] = $portfolio?->id;
         $armodel = ArModel::create($data);
 
         if ($request->hasFile('gltf') || $request->hasFile('bin') || $request->hasFile('textures')) {

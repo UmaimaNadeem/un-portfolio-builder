@@ -18,8 +18,21 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'superAdmin' => IsSuperAdmin::class,
             'admin' => IsAdmin::class,
-            'member' => IsMember::class
+            'member' => IsMember::class,
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
+
+        $middleware->redirectGuestsTo(fn () => route('auth.login'));
+
+        $middleware->redirectUsersTo(function () {
+            $user = auth()->user();
+
+            if ($user && $user->isAdmin()) {
+                return route('admin.dashboard');
+            }
+
+            return route('member.dashboard');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

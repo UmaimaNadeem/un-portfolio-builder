@@ -3,27 +3,45 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Traits\ResolvesActivePortfolio;
 use App\Models\UserProfileLink;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class UserProfileLinkController extends Controller
 {
+    use ResolvesActivePortfolio;
+
     public function index()
     {
-        $userProfileLinks = UserProfileLink::where('user_id', Auth::id())->get();
-        return view('pages.admin.userProfileLinks.index', compact('userProfileLinks'));
+        $portfolio = $this->activePortfolio();
+        if (!$portfolio) {
+            return redirect()->route('portfolios.index')->with('error', 'Select or create a portfolio first.');
+        }
+
+        $userProfileLinks = UserProfileLink::where('portfolio_id', $portfolio->id)->get();
+
+        return view('pages.admin.userProfileLinks.index', compact('userProfileLinks', 'portfolio'));
     }
 
     public function create()
     {
+        if (!$this->activePortfolio()) {
+            return redirect()->route('portfolios.index')->with('error', 'Select or create a portfolio first.');
+        }
+
         return view('pages.admin.userProfileLinks.create');
     }
 
     public function store(Request $request)
     {
+        $portfolio = $this->activePortfolio();
+        if (!$portfolio) {
+            return redirect()->route('portfolios.index')->with('error', 'Select or create a portfolio first.');
+        }
+
         $request->validate([
             'website_name' => 'required|string|max:255',
             'stack' => 'required|string|max:1000',
@@ -38,29 +56,19 @@ class UserProfileLinkController extends Controller
 
         $userId = Auth::id();
         $data = $request->only([
-            'website_name',
-            'stack',
-            'overview',
-            'portfolio_link',
-            'github',
-            'linkedin',
-            'whatsapp',
-            'instagram'
+            'website_name', 'stack', 'overview', 'portfolio_link',
+            'github', 'linkedin', 'whatsapp', 'instagram',
         ]);
 
         $data['user_id'] = $userId;
-
-        $stackInput = $request->input('stack');
-        $stacksArray = array_map('trim', explode(',', $stackInput)); // convert string to array
-        $data['stack'] = implode(',', $stacksArray); // store as comma-separated string
+        $data['portfolio_id'] = $portfolio->id;
+        $data['stack'] = implode(',', array_map('trim', explode(',', $request->input('stack'))));
 
         if ($request->hasFile('cv_resume')) {
             $file = $request->file('cv_resume');
             $filename = 'resume_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
             $path = public_path("content/{$userId}/cv");
-            if (!File::exists($path)) {
-                File::makeDirectory($path, 0777, true, true);
-            }
+            File::ensureDirectoryExists($path);
             $file->move($path, $filename);
             $data['cv_resume'] = "content/{$userId}/cv/{$filename}";
         }
@@ -70,11 +78,11 @@ class UserProfileLinkController extends Controller
         return redirect()->route('user-profile-links.index')->with('success', 'Profile link added successfully.');
     }
 
-
     public function show(UserProfileLink $userProfileLink)
     {
         return view('pages.admin.userProfileLinks.show', compact('userProfileLink'));
     }
+
     public function edit(UserProfileLink $userProfileLink)
     {
         return view('pages.admin.userProfileLinks.edit', compact('userProfileLink'));
@@ -84,7 +92,7 @@ class UserProfileLinkController extends Controller
     {
         $request->validate([
             'website_name' => 'required|string|max:255',
-            'stack' => 'required|string|max:1000', // allow longer string
+            'stack' => 'required|string|max:1000',
             'overview' => 'nullable|string',
             'portfolio_link' => 'nullable|url',
             'github' => 'nullable|url',
@@ -95,19 +103,10 @@ class UserProfileLinkController extends Controller
         ]);
 
         $data = $request->only([
-            'website_name',
-            'overview',
-            'portfolio_link',
-            'github',
-            'linkedin',
-            'whatsapp',
-            'instagram'
+            'website_name', 'overview', 'portfolio_link',
+            'github', 'linkedin', 'whatsapp', 'instagram',
         ]);
-
-        $stackInput = $request->input('stack');
-        $stacksArray = array_map('trim', explode(',', $stackInput));
-        $data['stack'] = implode(',', $stacksArray);
-
+        $data['stack'] = implode(',', array_map('trim', explode(',', $request->input('stack'))));
         $userId = Auth::id();
 
         if ($request->hasFile('cv_resume')) {
@@ -118,9 +117,7 @@ class UserProfileLinkController extends Controller
             $file = $request->file('cv_resume');
             $filename = 'resume_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
             $path = public_path("content/{$userId}/cv");
-            if (!File::exists($path)) {
-                File::makeDirectory($path, 0777, true, true);
-            }
+            File::ensureDirectoryExists($path);
             $file->move($path, $filename);
             $data['cv_resume'] = "content/{$userId}/cv/{$filename}";
         }
@@ -129,7 +126,6 @@ class UserProfileLinkController extends Controller
 
         return redirect()->route('user-profile-links.index')->with('success', 'Profile updated successfully.');
     }
-
 
     public function destroy(UserProfileLink $userProfileLink)
     {
